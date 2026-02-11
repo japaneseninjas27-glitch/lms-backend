@@ -6,6 +6,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
+from fastapi.middleware.cors import CORSMiddleware
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -17,6 +18,20 @@ db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
 app = FastAPI()
+
+
+# ... after app = FastAPI() ...
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://japanese-ninjas.com",
+        "https://www.japanese-ninjas.com",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Ensure upload directories exist
 (ROOT_DIR / "uploads").mkdir(exist_ok=True)
