@@ -19,7 +19,12 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Upload directory for notes
-NOTES_UPLOAD_DIR = Path("/app/backend/uploads/notes")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+UPLOAD_DIR = BASE_DIR / "uploads"
+NOTES_UPLOAD_DIR = UPLOAD_DIR / "notes"
+
 NOTES_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def serialize_doc(doc):
