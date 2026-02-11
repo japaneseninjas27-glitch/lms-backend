@@ -15,7 +15,10 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Upload directory for resumes
-RESUME_UPLOAD_DIR = Path("/app/backend/uploads/resumes")
+
+UPLOAD_DIR = Path("/tmp/uploads")
+RESUME_UPLOAD_DIR = UPLOAD_DIR / "resumes"
+
 RESUME_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def serialize_doc(doc):
