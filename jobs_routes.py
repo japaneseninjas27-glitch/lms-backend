@@ -130,15 +130,22 @@ async def update_application_status(application_id: str, new_status: str, admin_
     
     return {"message": f"Application status updated to {new_status}"}
 
+UPLOAD_DIR = Path("/tmp/uploads")
+
 @router.delete("/applications/{application_id}")
 async def delete_application(application_id: str):
     """Delete a job application (Admin only)"""
+    
     application = await db.job_applications.find_one({"id": application_id})
+    
     if application and application.get("resume_url"):
-        # Delete resume file
-        file_path = Path("/app/backend") / application["resume_url"].lstrip("/")
+        # Build correct file path
+        file_relative_path = application["resume_url"].lstrip("/")
+        file_path = UPLOAD_DIR / file_relative_path
+
         if file_path.exists():
             file_path.unlink()
-    
+
     await db.job_applications.delete_one({"id": application_id})
+    
     return {"message": "Application deleted"}
