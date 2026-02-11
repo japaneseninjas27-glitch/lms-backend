@@ -16,7 +16,12 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Upload directory for blog media
-BLOG_UPLOAD_DIR = Path("/app/backend/uploads/blog")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+UPLOAD_DIR = BASE_DIR / "uploads"
+BLOG_UPLOAD_DIR = UPLOAD_DIR / "blog"
+
 BLOG_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 def serialize_doc(doc):
